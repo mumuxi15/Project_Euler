@@ -57,11 +57,11 @@
    def LargestPrime(n):
    	'''start with largest prime number'''
    	maxPrime = 1
-     # if remove multiples of 2
+     # even number remove 2 until odd
    	while n % 2 == 0:
    		maxPrime = 2
    		n = n // 2
-   	# n must be odd here
+   	# odd
    	for i in range(3,int(n**0.5)+1,1):
    		while n % i ==0: # remove all multiples of i
    			n = n // i
@@ -88,13 +88,28 @@
    				s = str(p)
    				if s == s[::-1]:
    					maxP = max(maxP, p)
-   #					print (p,i,j)
-   				
-   	print ('max= ',maxP)
-   	if maxP <=1:
-   		return None
-   	else:
-   		return maxP
+   	return None if maxP <=1 else maxP
+     
+     
+   #  ----------------------------------
+   #  quick method:
+   #  palindromic = 1e5*a + 1e4*b + 1e3*c + 1e2*b + 10a 
+   #              = 100001a + 10010b + 1100 c 
+   #              = 11(9091a+910b+100c)
+   #  ----------------------------------
+   
+   def panlidromic3():
+   	# check if i or j is divisible by 11
+   	maxP = 1
+   	for i in range(990,110,-11):
+   		for j in range(999,100,-1): #3 digits
+   			p = i*j
+   			if p > maxP:
+   				s = str(p)
+   				if s == s[::-1]:
+   					maxP = max(maxP, p)
+     return None if maxP <=1 else maxP
+   	
    ```
 
 5. 2520 is the smallest number that can be divided by each of the numbers from 1 to 10 without any remainder.
@@ -169,31 +184,22 @@
 
    ```python
    def isPrime(x):
-   	# if isprime for x > 2
+   	# test if x is prime
    	if x % 2 == 0: 
    		return False
    	for i in range(3,int(x**0.5)+1,1):
    		if x % i ==0: # remove all multiples of i
    			return False
    	return True
-   	
-   	
-   def NthPrime(N):
-   	'''start with largest prime number'''
-   	if N == 1:
-   		return 2
-   	elif N == 2:
-   		return 3
-     
-   	count, x = 2, 3
-   	while count < N:
-   		x += 2 # inc x by 2 at a time
-   		if isPrime(x):
-   			count += 1
-   			print ('x = ',x, 'c=', count,N)
-   			
-   #	print (N,'th prime is ',x)
-   	return x 
+   
+   Nth_max = 10001
+   prime = [2,3,5]
+   x = 7 #starting with 7
+   while len(prime) < Nth_max:
+   	if isPrime(x):
+   		prime.append(x)
+   	x +=2
+   print (prime[-1])
    ```
 
    
