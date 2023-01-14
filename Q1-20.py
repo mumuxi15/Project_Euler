@@ -100,12 +100,11 @@ What is the smallest positive number that is evenly divisible by all of the numb
 def fast_primes(n):
 	""" Returns  a list of primes < n """
 	sieve = [True] * (n+1)
-	sieve[4::2] = [False]*(n//2-1) # even number not prime except 2
 	for i in range(3,int(n**0.5)+1,2):
 		if sieve[i]:
 			#for multiples of 3, starts with 9, increase every 2x3
 			sieve[i*i::2*i] = [False]*len(sieve[i*i::2*i])
-	return [i for i in range(2,n+1,1) if sieve[i]]
+	return [2]+[i for i in range(3,n+1,2) if sieve[i]]
 
 def smallest_divider(x):
 	'''find all primes <= x '''
@@ -198,13 +197,85 @@ def pythagorean(N):
 #print ('Find the product abc of triangle for which a+b+c = 70', pythagorean(70))
 
 '''   Question 10  '''
-def Euler10(x):
-	primes = fast_primes(x)
-	return sum(primes)
+def Euler10(n):
+	""" Returns  a list of primes < n """
+	sieve = [True] * (n+1)
+	sieve[4::2] = [False] * (n//2-1)
+	for i in range(3,int(n**0.5)+1,2):
+		if sieve[i]:
+			#for multiples of 3, starts with 9, increase every 2x3
+			sieve[i*i::2*i] = [False]*len(sieve[i*i::2*i])
+	summ = 2
+	l ={2:2}
 	
-print ('Find the sum of all the primes below two million: ',Euler10(2000000))
+	for x in range(3,n):
+		if sieve[x]:
+			summ += x 
+		l[x] = summ
+	return l
+
+#print ('Find the sum of all the primes below two million: ',Euler10(2000000)[2000000])
 '''   Question 11  '''
+def Euler11(A):
+	N = len(A)
+	maxP = 0
+	for j in range(N):
+		for i in range(N):
+			
+			if i+4<=N:
+				H = [A[j][i],A[j][i+1],A[j][i+2],A[j][i+3]]
+				if 0 in H:
+					continue 
+				
+				maxP = max(maxP, A[j][i]*A[j][i+1]*A[j][i+2]*A[j][i+3])
+#					print (H, ' s= ',maxS, 'p = ',maxP//10000)
+				
+			if j+4<=N:
+				V = [A[j][i],A[j+1][i],A[j+2][i],A[j+3][i]]
+				if 0 in V:
+					continue 
+				maxP = max(maxP, A[j][i]*A[j+1][i]*A[j+2][i]*A[j+3][i])
+				
+			if (i+4<=N)&(j+4<=N):
+				D = [A[j][i],A[j+1][i+1],A[j+2][i+2],A[j+3][i+3]]
+				if 0 in D:
+					continue 
+				maxP = max(maxP, A[j][i]*A[j+1][i+1]*A[j+2][i+2]*A[j+3][i+3])
+				
+			if (j>=3)&(i+4<=N):
+				D= [A[j][i],A[j-1][i+1],A[j-2][i+2],A[j-3][i+3]]
+				if 0 in D:
+					continue 
+				maxP = max(maxP,A[j][i]*A[j-1][i+1]*A[j-2][i+2]*A[j-3][i+3])
+				
+	return maxP
+
 '''   Question 12  '''
+
+def find_factors(x):
+	factors = 1
+	for i in range(2,int(math.sqrt(x))+1,1):
+		if x % i ==0:
+			factors += 2 if i != x//i else 1
+	return factors
+
+def Euler12(n):
+	l = {}
+	for x in range(2,50000,1):
+		l[x] = find_factors(x)
+	l[1] = 0
+		
+	factors = 0
+	i = 2
+	while factors <n:
+		if i%2 ==0:
+			factors = (l[i//2]+1)*(l[i+1]+1)-1
+		else:
+			factors = (l[i]+1)*(l[(i+1)//2]+1)-1
+		i += 1
+	return i*(i-1)//2
+print ('the first triangle number to have over five hundred divisors is ',Euler12(500))
+
 '''   Question 13  '''
 '''   Question 14  '''
 '''   Question 15  '''
