@@ -2,6 +2,7 @@
 
 #!/usr/bin/python
 import math
+import numpy as np
 '''   Question 1  '''
 
 #def Euler1(N):
@@ -401,9 +402,86 @@ def Euler18(A):
             A[i][j] = max(A[i][j]+A[i+1][j],A[i][j]+A[i+1][j+1])
     print (A[0][0])
     
-'''   Question 19  '''
     
-'''   Question 20  '''
+'''   Question 19  '''
+
+def Euler19(y1, m1, d1, y2, m2, d2):
+    #1 Jan 1900 is Monday
+    days_in_month = [31,28,31,30,31,30,31,31,30,31,30,31]
+    days_in_leap_month = [31,29,31,30,31,30,31,31,30,31,30,31]
+    
+    y0 = 1900
+    duration = 2800     #weekday patterns repeat every 2800 years
+    #import numpy as np
+#   months=np.zeros(duration*12)
+#   mark =np.zeros(duration*12)
+#   months[0::2]=31    #Jan
+#   months[1::12]=28   #Feb
+#   months[3::12]=30   #Apr
+#   months[5::12]=30   #Jun
+#   months[6::12]=31   #Jul
+#   months[7::12]=31   #Aug
+#   months[8::12]=30   #Sep
+#   months[9::12]=31   #Oct
+#   months[10::12]=30
+#   months[11::12]=31
+#   array of days in months 
+    months=[0]*duration*12
+    mark =[0]*duration*12
+    months[0::2] =[31]*len(months[0::2])    #Jan
+    months[1::12]=[28]*len(months[1::12])   #Feb
+    months[3::12]=[30]*len(months[3::12])   #Apr
+    months[5::12]=[30]*len(months[5::12])   #Jun
+    months[6::12]=[31]*len(months[6::12])   #Jul
+    months[7::12]=[31]*len(months[7::12])   #Aug
+    months[8::12]=[30]*len(months[8::12])   #Sep
+    months[9::12]=[31]*len(months[9::12])   #Oct
+    months[10::12]=[30]*len(months[10::12])
+    months[11::12]=[31]*len(months[11::12])
+    # 1992 is leap year. in x years,  
+    for i in range(0,duration):
+        # if leap year
+        if (y0+i)%4 == 0 and ((y0+i)%100!=0 or (y0+i)%400==0):
+            months[12*i+1] = 29
+            
+    sum_days = 0
+    for i in range(len(months)):
+        sum_days+=months[i]
+        if sum_days%7==6:
+            mark[i+1] = 1 #sum of Jan-March is Apr 1st
+    mark = mark*5 # backup twice is enough, but just in case
+    
+    
+    #the weekday calendar repeat every 2800 years. creates 4816 sundays
+    multiple = lambda y: (y-1900)//2800
+    
+    multiple1 = multiple(y1)
+    multiple2 = multiple(y2)
+    y1 = y1 - multiple1*2800
+    y2 = y2 - multiple2*2800
+    
+    while y2<y1:
+        multiple2 += -1
+        y2 += 2800
+        
+        
+    sundays = (multiple2-multiple1)*4816
+    
+    ## calculaltion within the array length
+    i,j = (y1-y0)*12+m1-1,(y2-y0)*12+m2
+    if d1>1:  #01/03 = start on 02/01
+        i+=1
+
+        
+#   print (y1,m1,d1,' index ',i, '   ', y2,m2,d2,' index ',j,' sum:', sum(mark[i:j]))
+    if len(mark[i:j])>0:
+        return (sundays+sum(mark[i:j]))
+    else:
+        return (sundays+0)
+
+
+#print ('How many Sundays fell on the first of the month during the twentieth century (1 Jan 1901 to 31 Dec 2000)? ', Euler19(1901 ,1, 1, 2000, 12, 31) )
+
 '''   Question 21  '''
 '''   Question 22  '''
 '''   Question 23  '''
