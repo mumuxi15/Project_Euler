@@ -2,6 +2,44 @@
 
 #!/usr/bin/python
 import math
+
+###  ---------------- HELPER FUNCTIONS -------------------   ###
+def permutation(lst):
+    if len(lst)==1:
+        print ('return : ',lst)
+        return [lst]
+    if len(lst) == 0:
+        return []
+    
+    
+    """  [A|B C], [B|A,C]; fixed + recursive"""
+    l = []
+    for i in range(len(lst)):
+        fixed = lst[i]
+        r = lst[0:i]+lst[i+1:]
+#		print (fixed,' | ',r)
+        for p in permutation(r):
+            l.append([fixed]+p)
+            
+#	print ('-----'*10,l)
+    return l
+
+
+
+# find prime factors
+def fast_primes(n):
+    """ Returns  a list of primes < n """
+    sieve = [True] * (n+1)
+    for i in range(3,int(n**0.5)+1,2):
+        if sieve[i]:
+            #for multiples of 3, starts with 9, increase every 2x3
+            sieve[i*i::2*i] = [False]*len(sieve[i*i::2*i])
+    return [2]+[i for i in range(3,n+1,2) if sieve[i]]
+
+###  ----------------------------------   ###
+
+
+
 '''   Question 1  '''
 
 #def Euler1(N):
@@ -97,16 +135,6 @@ def panlidromic2():
 What is the smallest positive number that is evenly divisible by all of the numbers from 1 to 20?
 '''
 
-# find prime factors
-def fast_primes(n):
-    """ Returns  a list of primes < n """
-    sieve = [True] * (n+1)
-    for i in range(3,int(n**0.5)+1,2):
-        if sieve[i]:
-            #for multiples of 3, starts with 9, increase every 2x3
-            sieve[i*i::2*i] = [False]*len(sieve[i*i::2*i])
-    return [2]+[i for i in range(3,n+1,2) if sieve[i]]
-
 def smallest_divider(x):
     '''find all primes <= x '''
     prime = {x:1 for x in fast_primes(x)}
@@ -132,6 +160,8 @@ def smallest_divider(x):
 # gcd method 
 
 def gcd(x,y):
+    """ explanation: Every common divisor of a and b also div (b-a)
+    """
     while y!=0:
         x,y=y,x%y
     return x
@@ -406,12 +436,8 @@ def Euler18(A):
 
 def Euler19(y1, m1, d1, y2, m2, d2):
     #1 Jan 1900 is Monday
-    days_in_month = [31,28,31,30,31,30,31,31,30,31,30,31]
-    days_in_leap_month = [31,29,31,30,31,30,31,31,30,31,30,31]
-    
     y0 = 1900
     duration = 2800     #weekday patterns repeat every 2800 years
-    #import numpy as np
 #   months=np.zeros(duration*12)
 #   mark =np.zeros(duration*12)
 #   months[0::2]=31    #Jan
@@ -439,7 +465,7 @@ def Euler19(y1, m1, d1, y2, m2, d2):
     months[11::12]=[31]*len(months[11::12])
     # 1992 is leap year. in x years,  
     for i in range(0,duration):
-        # if leap year
+        # if leap year Feb is 29
         if (y0+i)%4 == 0 and ((y0+i)%100!=0 or (y0+i)%400==0):
             months[12*i+1] = 29
             
@@ -470,7 +496,6 @@ def Euler19(y1, m1, d1, y2, m2, d2):
     i,j = (y1-y0)*12+m1-1,(y2-y0)*12+m2
     if d1>1:  #01/03 = start on 02/01
         i+=1
-
         
 #   print (y1,m1,d1,' index ',i, '   ', y2,m2,d2,' index ',j,' sum:', sum(mark[i:j]))
     if len(mark[i:j])>0:
@@ -494,8 +519,7 @@ def Euler21(N):
     records = [0]*N
     amicable = []
     for i in range(3,maximum):
-        factors = find_all_factors(i)
-        sum_factors = 1+sum(factors)
+        sum_factors = 1+sum(find_all_factors(i))
         
         if sum_factors>i:  #only record sum > its own
             records[i] = sum_factors
@@ -520,9 +544,56 @@ def Euler22(names):
     print (score)
     
 #Euler22(names = ["ZO","SHON","LYNWOOD","JERE","HAI","ELDEN","DORSEY","DARELL","BRODERICK","ALONSO"])
+    
+    
 '''   Question 23  '''
     
+def sum_of_divisors(x):
+    s = 0
+    for i in range(2,int(math.sqrt(x))+1,1):
+        if x % i ==0:
+            s += i if i==x//i else x//i+i
+    return s+1
+
+def Euler23(N=28123):
+    # all numbers > 28123 can be written as the sum of two abundant numbers    
+    abundant = [i for i in range(3,N) if sum_of_divisors(i)>i ]
+        
+    is_abundant_sum = [False]*(N)
+    for i in abundant:
+        for j in abundant:
+            z = i+j
+            if z <N and is_abundant_sum[z] is False:
+                is_abundant_sum[z]=True
+                
+    return sum([i for i, x in enumerate(is_abundant_sum) if x is False])
+    
+#print ('The sum of all the positive integers which cannot be written as the sum of two abundant number is ', Euler23(N=28123))
+    
 '''   Question 24  '''
+    
+def lexicographic_permutations(s,n):
+    N = len(s)
+    print ('total permutations: ',math.factorial(N))
+    l = []
+    
+    for i in range(N-1,3,-1):
+        print (i)
+        idx = n//math.factorial(i-1)
+        rem = n%math.factorial(i-1)
+#   l.append(s[i1])
+    
+    
+#   print (i,math.factorial(N-1))
+#   return sorted([''.join(p) for p in permutations([*s])])
+        
+
+
+
+#lexicographic_permutations(s="abdcefghijklm")
+lexicographic_permutations(s="abcde",n=20)
+    
+
 
 #a = [("'''   Question %d  '''")%(i) for i in range(6,25,1)]
 #for i in a:

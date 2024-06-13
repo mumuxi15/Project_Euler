@@ -733,18 +733,59 @@
 
    As 12 is the smallest abundant number, 1+2+3+4+6=16, the smallest number that can be written as the sum of two abundant numbers is 24. By mathematical analysis, it can be shown that all integers greater than 28123 can be written as the sum of two abundant numbers. However, this upper limit cannot be reduced any further by analysis even though it is known that the greatest number that cannot be expressed as the sum of two abundant numbers is less than this limit.
 
-   Find the sum of all the positive integers which cannot be written as the sum of two abundant numbers.
+   Find the sum of all the positive integers which cannot be written as the sum of two abundant numbers. 4179871
 
-24. a
-
-25. a
-
-26. 
-
-     
-
-
-
+   ```python
+   def sum_of_divisors(x):
+       s = 0
+       for i in range(2,int(math.sqrt(x))+1,1):
+           if x % i ==0:
+               s += i if i==x//i else x//i+i
+       return s+1
+   
+   def Euler23(N=28123):
+       # all numbers > 28123 can be written as the sum of two abundant numbers    
+       abundant = [i for i in range(3,N) if sum_of_divisors(i)>i ]
+           
+       is_abundant_sum = [False]*(N)
+       for i in abundant:
+           for j in abundant:
+               z = i+j
+               if z <N and is_abundant_sum[z] is False:
+                   is_abundant_sum[z]=True
+                   
+       return sum([i for i, x in enumerate(is_abundant_sum) if x is False])
+       
+   ```
 
    
+
+24. A permutation is an ordered arrangement of objects. For example, 3124 is one possible permutation of the digits 1, 2, 3 and 4. If all of the permutations are listed numerically or alphabetically, we call it lexicographic order. The lexicographic permutations of 0, 1 and 2 are:
+
+   012  021  102  120  201  210
+
+   What is the millionth lexicographic permutation of the digits 0, 1, 2, 3, 4, 5, 6, 7, 8 and 9?
+
+   ```python
+   ```
+
+   
+
+25. The Fibonacci sequence is defined by the recurrence relation:
+
+   F~n~ + F~n-1~ + F~n-2~ where F~1~ = 1 and F~2~ = 1
+
+   Hence the first 12 terms will be: 1,1,2,3,5,8,13,21,34,55,89,144
+
+   The 12th term, F~12~ , is the first term to contain three digits.
+
+   What is the index of the first term in the Fibonacci sequence to contain 1000 digits?
+
+26. a
+
+      
+
+
+
+
 
