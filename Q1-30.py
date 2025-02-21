@@ -574,27 +574,72 @@ def Euler23(N=28123):
     
 def lexicographic_permutations(s,n):
     N = len(s)
-    print ('total permutations: ',math.factorial(N))
+    total = math.factorial(N)
+    print ('total permutations: ',total)
     l = []
     
-    for i in range(N-1,3,-1):
-        print (i)
+    for i in range(N,1,-1):
         idx = n//math.factorial(i-1)
         rem = n%math.factorial(i-1)
-#   l.append(s[i1])
+        print ('i=',i,idx,rem)
+        print (math.factorial(i-1))
+
+#lexicographic_permutations(s="0123",n=5)
+
+
+'''   Question 25  '''
+def Euler25(n):
+    sys.set_int_max_str_digits(5001)
+    a = 1
+    b = 1
+    count = 2
+    rs = [0,1]
+    length = 1
+    c = 10
     
+    for count in range(2,25000):
+        if b>c:
+            rs.append(count)
+            c *= 10
+        a, b = b, a + b  # Update Fibonacci numbers
     
-#   print (i,math.factorial(N-1))
-#   return sorted([''.join(p) for p in permutations([*s])])
-        
+    return rs[n]
 
+#print ('The index of the first term in the Fibonacci sequence to contain 1000 digits is ', Euler25(1000))
 
+'''  Question 26   '''
 
-#lexicographic_permutations(s="abdcefghijklm")
-lexicographic_permutations(s="abcde",n=20)
+def get_prime(n):
+    # find the greatest prime under n
+    sieve = [True]*n
+    for i in range(3,len(sieve),2):
+        if sieve[i]:
+            sieve[i*i::2*i]=[False]*len(sieve[i*i::2*i])
+    sieve[4::2] = [False]*len(sieve[4::2])
     
+    return sieve
+
+def Euler26(n):
+    ''' the longest recur would be the close reptend prime - 
+    A prime p for which 1/p has a maximal period decimal expansion of p-1 digits
+    '''
+    #pow(4, 3, 5)  = 4^3%5
+    n = n-1 # d<N 
+    if n<8:
+        return 3
+    for i in range(n,2,-1):
+        if prime_list[i]:
+            recur = 1
+            k = 1
+            while pow(10,k,i)!=1:
+                recur+=1
+                k+=1
+            if recur+1 == i:
+                return i
+            
+#prime_list = get_prime(10001)
+#print ('Find the value of d<1000 for which 1/d contains the longest recurring cycle in its decimal fraction part, d=', Euler26(1000))
 
 
-#a = [("'''   Question %d  '''")%(i) for i in range(6,25,1)]
-#for i in a:
-#	print (i)
+'''  Question 27   '''
+            

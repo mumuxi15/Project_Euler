@@ -766,7 +766,24 @@
 
    What is the millionth lexicographic permutation of the digits 0, 1, 2, 3, 4, 5, 6, 7, 8 and 9?
 
+   2783915460
+
    ```python
+   def Euler24(n,length):
+       #   0123 0132 0213 0231 0312 0321 1023 1032 ..
+       numbers = list(range(length))
+       n = n-1     
+       rs = []
+       
+       while len(numbers)>0:
+           length = len(numbers)        
+           d = numbers[n//(math.factorial(length-1))]
+           n = n % (math.factorial(length-1))
+           rs.append(d)
+           numbers.remove(d)    
+       print (''.join([str(r) for r in rs]))
+   
+   Euler24(1000000,10)
    ```
 
    
@@ -781,9 +798,102 @@
 
    What is the index of the first term in the Fibonacci sequence to contain 1000 digits?
 
-26. a
+   4782th 
 
-      
+   ```python
+   def Euler25(n):
+       a = 1
+       b = 1
+       count = 2
+       while len(str(b))<n:
+           c = b
+           b += a
+           a = c 
+           count +=1
+       print (count)
+   
+   
+   def Euler25(n):
+   	# More efficient method 
+   	# return a list, to pass Hackerrank runtime error
+       a,b = 1,1
+       rs = [0,1]
+       length = 1
+       c = 10 # measure no of digits
+       
+       for count in range(2,n):
+           if b>c:
+               rs.append(count)
+               c *= 10
+           a, b = b, a + b  # Update Fibonacci numbers
+       return r
+   ```
+
+26. A unit fraction contains 1 in the numerator. The decimal representation of the unit fractions with denominators 2 to 10 are given:
+
+   1/2=0.5   1/3=0.(3)   1/4=0.25   1/5=0.2   1/6=0.1(6)   1/7=0.(142857)   1/8=0.125   1/9=0.(1)   1/10=0.1
+
+   Where 0.1(6) means 0.166666⋯, and has a 1-digit recurring cycle. It can be seen that 1/7 has a 6-digit recurring cycle.
+
+   Find the value of d<1000 for which 1/d contains the longest recurring cycle in its decimal fraction part.
+
+   983
+
+   ```python
+   def get_prime(n):
+       # find the greatest prime under n
+       sieve = [True]*n
+       for i in range(3,len(sieve),2):
+           if sieve[i]:
+               sieve[i*i::2*i]=[False]*len(sieve[i*i::2*i])
+       sieve[4::2] = [False]*len(sieve[4::2])
+       
+       return sieve
+   
+   def Euler26(n):
+       ''' the longest recur would be the close reptend prime - 
+       A prime p for which 1/p has a maximal period decimal expansion of p-1 digits
+       '''
+       #pow(4, 3, 5)  = 4^3%5
+       n = n-1 # d<N 
+       if n<8:
+           return 3
+       for i in range(n,2,-1):
+           if prime_list[i]:
+               recur = 1
+               k = 1
+               while pow(10,k,i)!=1:
+                   recur+=1
+                   k+=1
+               if recur+1 == i:
+                   return i
+               
+   prime_list = get_prime(10001)
+   Euler26(1000)
+   
+   ```
+
+   
+
+27. a
+
+28. a
+
+29. a
+
+30. a
+
+31. a
+
+32. a
+
+33. a
+
+34. a
+
+35. a
+
+   ​    
 
 
 
